@@ -119,8 +119,8 @@ function getButton() {
         };
 
         const url = data.FHIRServer + "/" + data.ResourceType + "/" + data.ID;
-        console.log(url)
-        console.log(cleanObj(data));
+        fetchServer(url)
+        //console.log(cleanObj(data));
     });
 }
 
@@ -135,4 +135,10 @@ function cleanObj(obj) {
         }
     }
     return obj;
+}
+
+async function fetchServer(url){
+    const data =await fetch(url)
+    const json =await data.json();
+    console.log(json)
 }
