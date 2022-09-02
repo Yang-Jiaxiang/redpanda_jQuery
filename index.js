@@ -72,15 +72,17 @@ function getHTTPVerb(selectObject) {
     var value = selectObject.value;
     switch (value) {
         case "POST":
-            $("#TokenDIV").show();
-            $("#FHIRJsonDIV").show();
+            $("#TokenDIV").show("slow");
+            $("#FHIRJsonDIV").show("slow");
             break;
 
         case "GET":
-            $("#TokenDIV").show();
-            $("#IDDIV").show();
-            $("#PageCountDIV").show();
-            $("#SortByDIV").show();
+            $("#TokenDIV").show("slow");
+            $("#IDDIV").show("slow");
+            $("#PageCountDIV").show("slow");
+            $("#SortByDIV").show("slow");
+            getButton();
+            break;
     }
 }
 
@@ -102,4 +104,35 @@ async function getResourceType(selectObject) {
         });
         select.innerHTML = str;
     }
+}
+
+function getButton() {
+    $("#form").submit(function (event) {
+        event.preventDefault();
+        const data = {
+            FHIRServer: $("#FHIRServer").val(),
+            ResourceType: $("#ResourceType").val(),
+            Token: $("#Token").val(),
+            ID: $("#ID").val(),
+            PageCount: $("#PageCount").val(),
+            SortBy: $("#SortBy").val(),
+        };
+
+        const url = data.FHIRServer + "/" + data.ResourceType + "/" + data.ID;
+        console.log(url)
+        console.log(cleanObj(data));
+    });
+}
+
+function cleanObj(obj) {
+    for (var propName in obj) {
+        if (
+            obj[propName] === null ||
+            obj[propName] === undefined ||
+            obj[propName] === ""
+        ) {
+            delete obj[propName];
+        }
+    }
+    return obj;
 }

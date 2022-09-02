@@ -23,17 +23,18 @@
         </div>
 
         <div class="form">
-            <form class="row g-3" action="http://example.com/" method="GET">
+            <form class="row g-3" id="form">
                 <div class="col-md-8">
                     <div class="input-group">
                         <div class="col-md-2">
                             <label for="HTTPVerb" class="form-label">HTTP Verb</label>
-                            <select id="HTTPVerb" class="form-select" onchange="getHTTPVerb(this)">
+                            <select id="HTTPVerb" class="form-select" required onchange="getHTTPVerb(this)">
                             </select>
                         </div>
                         <div class="col-md-10">
                             <label for="FHIRServer" class="form-label">FHIR Server</label>
-                            <input type="search" class="form-control" id="FHIRServer" placeholder="FHIR Server" required>
+                            <input type="search" class="form-control" id="FHIRServer" placeholder="FHIR Server"
+                                required>
                         </div>
                     </div>
                 </div>
@@ -47,8 +48,8 @@
                 <div class="col-md-2">
                     <label for="submitButton" class="form-label">Send / Reset</label>
                     <div id="submitButton">
-                        <button type="submit" class="btn btn-success">Send</button>
-                        <button type="button" class="btn btn-danger" onclick="formReset()">Reset</button>
+                        <button type="submit" class="btn btn-success" id="SendButton">Send</button>
+                        <button type="button" class="btn btn-danger" onclick="formReset()" id="ResetButton">Reset</button>
                     </div>
                 </div>
 
