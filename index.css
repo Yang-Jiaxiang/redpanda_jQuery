@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+}
+
+.header {
+    background-color: rgb(203, 203, 203);
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.logoText {
+    color: #dc3545;
+}
+
+.header .logo .logoText {
+    -webkit-text-stroke: 1px #dc3545;
+}
+
+.header .form{
+    margin-top: 10px;
+}

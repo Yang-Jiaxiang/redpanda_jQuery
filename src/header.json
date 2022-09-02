@@ -1,0 +1,28 @@
+{
+    "headers": {
+        "Patient": [
+            "id",
+            "birthDate",
+            "gender",
+            "identifier",
+            "name"
+        ],
+        "Condition": [
+            "_id",
+            "clinical-status",
+            "code",
+            "subject",
+            "onset-date",
+            "abatement-date",
+            "severity"
+        ],
+        "DiagnosticReport": [
+            "_id",
+            "status",
+            "subject",
+            "category",
+            "code",
+            "date"
+        ]
+    }
+}
