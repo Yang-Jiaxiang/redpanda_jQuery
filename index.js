@@ -3,6 +3,11 @@ setHTTPVerbSelect();
 setResourceType();
 setPageCountSelect();
 initFormDivDisplay();
+submitButton();
+$("#TokenDIV").show("slow");
+$("#IDDIV").show("slow");
+$("#PageCountDIV").show("slow");
+$("#SortByDIV").show("slow");
 
 function setHTTPVerbSelect() {
     var myMap = new Map(),
@@ -12,7 +17,7 @@ function setHTTPVerbSelect() {
     myMap.set("PUT", "PUT");
     myMap.set("DELETE", "DELETE");
 
-    let str = "<option selected></option>";
+    let str = "";
     myMap.forEach((key, val) => {
         str += `<option value='${key}'>${val}</option>`;
     });
@@ -48,7 +53,7 @@ async function setResourceType() {
         myMap.set(item[0], item[0]);
     });
 
-    let str = "<option selected></option>";
+    let str = "";
     myMap.forEach((key, val) => {
         str += `<option value='${key}'>${val}</option>`;
     });
@@ -81,7 +86,7 @@ function getHTTPVerb(selectObject) {
             $("#IDDIV").show("slow");
             $("#PageCountDIV").show("slow");
             $("#SortByDIV").show("slow");
-            getButton();
+            //getButton();
             break;
     }
 }
@@ -106,22 +111,39 @@ async function getResourceType(selectObject) {
     }
 }
 
-function getButton() {
+function submitButton() {
     $("#form").submit(function (event) {
         event.preventDefault();
-        const data = {
-            FHIRServer: $("#FHIRServer").val(),
-            ResourceType: $("#ResourceType").val(),
-            Token: $("#Token").val(),
-            ID: $("#ID").val(),
-            PageCount: $("#PageCount").val(),
-            SortBy: $("#SortBy").val(),
-        };
+        const HTTPVerb = $("#HTTPVerb").val();
+        switch (HTTPVerb) {
+            case "POST":
 
-        const url = data.FHIRServer + "/" + data.ResourceType + "/" + data.ID;
-        fetchServer(url)
-        //console.log(cleanObj(data));
+            case "GET":
+                getFHIR();
+                break;
+            case "PUT":
+
+            case "DELETE":
+
+            default:
+        }
     });
+}
+
+function getFHIR() {
+    const data = {
+        FHIRServer: $("#FHIRServer").val(),
+        ResourceType: $("#ResourceType").val(),
+        Token: $("#Token").val(),
+        ID: $("#ID").val(),
+        PageCount: $("#PageCount").val(),
+        SortBy: $("#SortBy").val(),
+    };
+    if (data.FHIRServer.substr(-1) === "/") {
+        data.FHIRServer = data.FHIRServer.slice(0, -1);
+    }
+    const url = data.FHIRServer + "/" + data.ResourceType + "/" + data.ID;
+    fetchServer(url);
 }
 
 function cleanObj(obj) {
@@ -137,8 +159,8 @@ function cleanObj(obj) {
     return obj;
 }
 
-async function fetchServer(url){
-    const data =await fetch(url)
-    const json =await data.json();
-    console.log(json)
+async function fetchServer(url) {
+    const data = await fetch(url);
+    const json = await data.json();
+    console.log(json);
 }
