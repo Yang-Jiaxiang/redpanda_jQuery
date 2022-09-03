@@ -18,6 +18,16 @@ body {
     -webkit-text-stroke: 1px #dc3545;
 }
 
-.header .form{
+.header .form {
     margin-top: 10px;
+}
+
+.tableDiv {
+    margin-top: 20px;
+}
+
+#tbodytd {
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100px;
 }

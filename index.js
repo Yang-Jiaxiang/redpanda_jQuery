@@ -1,4 +1,4 @@
-const HeaderJson = "./src/header.json";
+const HeaderJson = "src/header.json";
 setHTTPVerbSelect();
 setResourceType();
 setPageCountSelect();
@@ -130,7 +130,7 @@ function submitButton() {
     });
 }
 
-function getFHIR() {
+async function getFHIR() {
     const data = {
         FHIRServer: $("#FHIRServer").val(),
         ResourceType: $("#ResourceType").val(),
@@ -143,7 +143,60 @@ function getFHIR() {
         data.FHIRServer = data.FHIRServer.slice(0, -1);
     }
     const url = data.FHIRServer + "/" + data.ResourceType + "/" + data.ID;
-    fetchServer(url);
+    const FHIRjson = await fetchServer(url);
+    renderContent(FHIRjson, data.ResourceType);
+}
+
+async function renderContent(FHIRjson, ResourceType) {
+    const responseHeader = await fetch(HeaderJson);
+    const { headers } = await responseHeader.json();
+    var jQueryHeader = $("#mytable").find("thead") + "<tr>";
+    headers[ResourceType].map((item) => {
+        jQueryHeader += `<td>${item}</td>`;
+    });
+    $("#mytable")
+        .find("thead")
+        .html(jQueryHeader + "<td>options</td></tr>");
+
+    var jQueryHeader = $("#mytable").find("tbody");
+    if (FHIRjson.resourceType === "Bundle") {
+        jQueryHeader += "<tr>";
+        FHIRjson.entry.map((item) => {
+            headers[ResourceType].map((headers) => {
+                if (typeof item.resource[headers] === "object") {
+                    jQueryHeader += `<td id="tbodytd">${objectToString(
+                        item.resource[headers]
+                    )}</td>`;
+                } else {
+                    jQueryHeader += `<td>${item.resource[headers]}</td>`;
+                }
+            });
+            jQueryHeader += tebaleOptionsButton(item.resource.id) + "</tr>";
+        });
+    } else {
+        headers[ResourceType].map((headers) => {
+            if (typeof FHIRjson[headers] === "object") {
+                jQueryHeader += `<td id="tbodytd">${objectToString(
+                    FHIRjson[headers]
+                )}</td>`;
+            } else {
+                jQueryHeader += `<td>${FHIRjson[headers]}</td>`;
+            }
+        });
+    }
+
+    $("#mytable").find("tbody").html(jQueryHeader);
+}
+
+function tebaleOptionsButton(id) {
+    const optionsButton = `
+    <td>
+    <button type="button" id="${id}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Open
+    </button>
+    </td>
+`;
+    return optionsButton;
 }
 
 function cleanObj(obj) {
@@ -162,5 +215,19 @@ function cleanObj(obj) {
 async function fetchServer(url) {
     const data = await fetch(url);
     const json = await data.json();
-    console.log(json);
+    return json;
+}
+
+//將object轉成string
+function objectToString(jsons, stringLimit) {
+    var html = "";
+    for (var json of jsons) {
+        var result = [];
+        for (var i in json) result.push([i, json[i]]);
+        result.map((item) => {
+            html += `<b>${item[0]}</b>:`;
+            html += `${JSON.stringify(item[1])},　`;
+        });
+    }
+    return html;
 }
