@@ -9,6 +9,8 @@ $("#IDDIV").show("slow");
 $("#PageCountDIV").show("slow");
 $("#SortByDIV").show("slow");
 
+var allFHIRjson = {};
+
 function setHTTPVerbSelect() {
     var myMap = new Map(),
         select = document.getElementById("HTTPVerb");
@@ -115,6 +117,8 @@ function submitButton() {
     $("#form").submit(function (event) {
         event.preventDefault();
         const HTTPVerb = $("#HTTPVerb").val();
+        for (var member in allFHIRjson) delete allFHIRjson[member];
+
         switch (HTTPVerb) {
             case "POST":
 
@@ -159,8 +163,8 @@ async function renderContent(FHIRjson, ResourceType) {
         .html(jQueryHeader + "<td>options</td></tr>");
 
     var jQueryHeader = $("#mytable").find("tbody");
+    jQueryHeader += "<tr>";
     if (FHIRjson.resourceType === "Bundle") {
-        jQueryHeader += "<tr>";
         FHIRjson.entry.map((item) => {
             headers[ResourceType].map((headers) => {
                 if (typeof item.resource[headers] === "object") {
@@ -171,7 +175,7 @@ async function renderContent(FHIRjson, ResourceType) {
                     jQueryHeader += `<td>${item.resource[headers]}</td>`;
                 }
             });
-            jQueryHeader += tebaleOptionsButton(item.resource.id) + "</tr>";
+            jQueryHeader += tebaleOptionsButton(item.resource) + "</tr>";
         });
     } else {
         headers[ResourceType].map((headers) => {
@@ -183,20 +187,26 @@ async function renderContent(FHIRjson, ResourceType) {
                 jQueryHeader += `<td>${FHIRjson[headers]}</td>`;
             }
         });
+        jQueryHeader += tebaleOptionsButton(FHIRjson) + "</tr>";
     }
 
     $("#mytable").find("tbody").html(jQueryHeader);
 }
 
-function tebaleOptionsButton(id) {
+function tebaleOptionsButton(FHIRjson) {
+    allFHIRjson[FHIRjson.id] = FHIRjson;
     const optionsButton = `
     <td>
-    <button type="button" id="${id}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" id="${FHIRjson.id}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="modalButtonClick(this.id)">
         Open
     </button>
     </td>
 `;
     return optionsButton;
+}
+
+function modalButtonClick(id) {
+    $(".modalTerxtarrea").val(JSON.stringify(allFHIRjson[id], undefined, 2));
 }
 
 function cleanObj(obj) {
