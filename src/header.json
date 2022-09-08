@@ -8,7 +8,7 @@
             "name"
         ],
         "Condition": [
-            "_id",
+            "id",
             "clinical-status",
             "code",
             "subject",
@@ -17,12 +17,25 @@
             "severity"
         ],
         "DiagnosticReport": [
-            "_id",
+            "id",
             "status",
             "subject",
             "category",
             "code",
             "date"
+        ],
+        "Encounter": [
+            "id",
+            "class",
+            "date",
+            "identifier",
+            "location",
+            "subject",
+            "status"
+        ],
+        "Medication": [
+            "id",
+            "code"
         ]
     }
 }

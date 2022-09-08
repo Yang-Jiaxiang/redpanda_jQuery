@@ -231,13 +231,23 @@ async function fetchServer(url) {
 //將object轉成string
 function objectToString(jsons, stringLimit) {
     var html = "";
-    for (var json of jsons) {
-        var result = [];
-        for (var i in json) result.push([i, json[i]]);
-        result.map((item) => {
-            html += `<b>${item[0]}</b>:`;
-            html += `${JSON.stringify(item[1])},　`;
-        });
+    if (jsons.length > 0) {
+        for (var json of jsons) {
+            var result = [];
+            for (var i in json) result.push([i, json[i]]);
+            result.map((item) => {
+                html += `<b>${item[0]}</b>:`;
+                html += `${JSON.stringify(item[1])},　`;
+            });
+        }
+    } else {
+        var array = Object.entries(jsons);
+        //console.log(array)
+        for(var json of array){
+            html += `<b>${json[0]}</b>:`;
+            html += `${JSON.stringify(json[1])},　`;
+        }
+        html += JSON.stringify(array);
     }
     return html;
 }
